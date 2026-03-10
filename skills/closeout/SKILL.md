@@ -46,11 +46,11 @@ Run `date` first to establish current day and time.
 ## Step 2: Last Check — Email & Slack
 
 - Scan Gmail for anything new/unread since morning briefing
-- **Scholar alert triage (MANDATORY):** Search for any untriaged Google Scholar alerts (from: scholaralerts-noreply@google.com) still in inbox. No Scholar alert should ever go untriaged. For each:
+- **Scholar alert triage (MANDATORY):** Search for any untriaged Google Scholar alerts using `subject:"new results" is:unread` (do NOT use `from:` — it doesn't work reliably with some MCP servers). No Scholar alert should ever go untriaged. For each:
   - Filter papers for relevance to active projects
   - Add relevant papers to your literature tracking database
-  - Archive ALL Scholar alert emails (remove INBOX label)
-  - **IMPORTANT: The archive step MUST be executed directly, NOT delegated to subagents.** Subagents may report success without actually archiving.
+  - Archive AND mark as read ALL Scholar alert emails using `remove_label_ids: ["INBOX", "UNREAD"]`
+  - **IMPORTANT: The archive/mark-read step MUST be executed directly, NOT delegated to subagents.** Subagents may report success without actually archiving.
 - Scan Slack for unread DMs, mentions, important channel activity
 - Flag anything urgent or needing response — add to todos if needed
 

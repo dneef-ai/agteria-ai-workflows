@@ -38,7 +38,7 @@ If `$ARGUMENTS` contains `--quick`, skip Steps 2-4 and only do Calendar + Todos 
 
 ### 2b: Google Scholar Alerts (optional — for research teams)
 - **Scholar alerts must ALWAYS be triaged. No alert should ever go untriaged.**
-- Identify all Google Scholar alert emails (from: scholaralerts-noreply@google.com)
+- Search for Scholar alerts using `subject:"new results" is:unread` (do NOT use `from:` — it doesn't work reliably with some MCP servers)
 - Filter papers for relevance to active projects
 - For each relevant paper, add to a tracking database (e.g., Notion Literature Tracker) with:
   - Paper: title
@@ -48,7 +48,7 @@ If `$ARGUMENTS` contains `--quick`, skip Steps 2-4 and only do Calendar + Todos 
   - Relevance: `High`, `Medium`, or `Low`
   - Notes: author, year, journal, brief context
 - List relevant papers in the briefing summary
-- Archive ALL Scholar alert emails using `mcp__google-workspace__batch_modify_gmail_message_labels` with `remove_label_ids: ["INBOX"]`
+- Archive AND mark as read ALL Scholar alert emails using `mcp__google-workspace__batch_modify_gmail_message_labels` with `remove_label_ids: ["INBOX", "UNREAD"]`
 - **IMPORTANT: The archive step MUST be executed directly in the main context, NOT delegated to subagents.** Subagents may report success without actually performing the archive. Triage and relevance filtering can be parallelized, but the final `batch_modify_gmail_message_labels` call must happen in the main conversation.
 
 ### 2c: Actionable Email
