@@ -236,6 +236,33 @@ The `/weekly` skill reads all daily logs, synthesizes project-level summaries, a
 
 ---
 
+## 8. Cost Optimization — Model Switching
+
+Claude Code lets you choose between models (Sonnet vs Opus) and reasoning effort levels (0-100). These are two separate dials:
+
+- **Model**: Sonnet is fast and cheap; Opus is smarter but 5x more expensive per token
+- **Reasoning effort**: How hard the model thinks before responding. Higher = more tokens consumed.
+
+### The pattern that works
+
+Use **Sonnet** for routine, repeatable tasks:
+- Morning briefings, daily closeouts
+- Email triage, Scholar alert archiving
+- Todo updates, Slack scanning
+- Simple file edits, data formatting
+
+Switch to **Opus** for tasks requiring deep reasoning:
+- Experiment design and protocol writing
+- Literature analysis and paper evaluation
+- Multi-agent safety/toxicology sweeps
+- Complex debugging or architectural decisions
+- Cross-experiment pattern analysis
+
+### In practice
+Toggle models with `/model` in Claude Code. A morning briefing on Sonnet costs roughly 10-20x less than on Opus — and produces the same result, since the task is mostly "read emails, sort them, archive junk." Save the expensive model for where it actually matters.
+
+---
+
 ## What Works Best
 
 1. **Consolidation over fragmentation**: One AI session touching multiple tools beats multiple AI tools each doing one thing.
