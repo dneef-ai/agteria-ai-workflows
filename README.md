@@ -207,6 +207,8 @@ The `/experiment` skill handles the Friday planning and Monday deliverable.
 ### Persistent Memory
 Claude Code's memory system means you explain things once. Project context, collaborator details, preferences, and decisions persist across sessions. See `examples/memory-template.md` for how to set this up.
 
+**Important: the 200-line rule.** Only the first ~200 lines of MEMORY.md are loaded at session start. Content beyond that gets truncated, so end-of-file instructions may never be read. The fix: keep MEMORY.md as a short index (~50-80 lines) with only session-critical info, and split everything else into topic files (`collaborators.md`, `setup.md`, `notion-databases.md`, etc.) that Claude reads on demand. See `examples/memory-template.md` for the full pattern.
+
 ### Decision Logging
 Every significant decision made during a session is automatically logged to a Notion database: what was decided, why, which project it affects, and where it was discussed. When someone asks "why did we choose approach X?" there's a searchable record with context.
 
