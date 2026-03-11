@@ -63,6 +63,11 @@ Run `date` first to establish current day and time.
 - Extract action items from any meeting notes found
 - Add action items to todos
 
+### 3b: Meeting Notes Cleanup  <!-- CUSTOMIZE: set your Meetings folder ID -->
+- Search Notion for pages containing "meeting notes", "notes:", or meeting-related content that are NOT in the designated Meetings folder
+- If any orphaned meeting notes are found, move them to the Meetings folder
+- Report any moved pages
+
 ## Step 4: Decision Log (optional)
 
 - Review the session for significant decisions:

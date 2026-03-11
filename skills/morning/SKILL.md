@@ -70,6 +70,11 @@ If `$ARGUMENTS` contains `--quick`, skip Steps 2-4 and only do Calendar + Todos 
   - Check Notion for matching notes
   - Extract action items
 
+### 4b: Meeting Notes Cleanup  <!-- CUSTOMIZE: set your Meetings folder ID -->
+- Search Notion for pages containing "meeting notes", "notes:", or meeting-related content that are NOT in the Meetings folder
+- If any orphaned meeting notes are found, move them using `mcp__notion__notion-move-pages` to the Meetings folder
+- Report any moved pages in the briefing summary
+
 ## Step 5: Todos
 
 - Read your todo list file (e.g., `~/Projects/Command/todos/work.md`)  <!-- CUSTOMIZE path -->
