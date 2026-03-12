@@ -25,7 +25,8 @@ If `$ARGUMENTS` contains `--quick`, skip Steps 2-4 and only do Calendar + Todos 
 
 ## Step 2: Email
 
-- Search Gmail for unread/new emails since last session using `mcp__google-workspace__search_gmail_messages`
+- Search Gmail for unread/new emails since last session using `mcp__google-workspace__search_gmail_messages` with `page_size: 50`
+- If results hit the page limit, use `page_token` to fetch additional pages — do NOT stop at 25
 - Fetch full content of all unread emails using `mcp__google-workspace__get_gmail_messages_content_batch`
 - Triage into three categories:
 
@@ -34,7 +35,7 @@ If `$ARGUMENTS` contains `--quick`, skip Steps 2-4 and only do Calendar + Todos 
 - **Always junk**: [add known spam senders here]  <!-- CUSTOMIZE -->
 - **Not junk**: emails from team members, collaborators, known contacts, active tool vendors
 - List identified junk in the briefing summary (sender + subject, one line each)
-- Archive all junk emails using `mcp__google-workspace__batch_modify_gmail_message_labels` with `remove_label_ids: ["INBOX"]`
+- Archive all junk emails using `mcp__google-workspace__batch_modify_gmail_message_labels` with `remove_label_ids: ["INBOX", "UNREAD"]` (must remove BOTH or emails persist in Gmail's Unread view)
 
 ### 2b: Google Scholar Alerts (optional — for research teams)
 - **Scholar alerts must ALWAYS be triaged. No alert should ever go untriaged.**
