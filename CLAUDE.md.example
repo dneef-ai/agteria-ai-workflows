@@ -8,7 +8,10 @@ Always use `date` (system clock) to get the current day, date, and time. Never g
 - **Session start**: Run `date` before the morning briefing.
 - **Morning briefing / daily closeout / weekly closeout**: Run `date` at the start of each workflow.
 - **Periodically during long sessions**: Run `date` before time-sensitive actions.
-- All times presented to the user should be in their local timezone.
+- All times presented to the user should be in GMT (or configure your timezone here).  <!-- CUSTOMIZE -->
+
+## Post-Meeting Auto-Check
+When checking the time and a calendar meeting's end time has passed, proactively scan for meeting notes (auto-generated notes in email, Notion Meetings folder) without waiting for the user to ask. Import notes, extract action items, and update todos accordingly.
 
 ## What This Is
 
@@ -19,6 +22,7 @@ Instead of context-switching between Slack, Gmail, Calendar, and note apps, this
 ```
 Command/
   CLAUDE.md          -- this file (project instructions)
+  email/             -- email drafts, Scholar alert archives
   daily-log/         -- per-day work logs (YYYY-MM-DD.md)
   weekly-log/        -- weekly summary logs
   todos/             -- persistent todo lists
@@ -41,6 +45,7 @@ Command/
 ### Notion (MCP server)
 - Read and create pages, query databases
 - Meeting notes, decision logs, literature tracking
+- Auto-fill databases: Literature Tracker and Decision Log (Claude fills these proactively — the user will forget)
 
 ### Airtable (MCP server)
 - Experiment data management

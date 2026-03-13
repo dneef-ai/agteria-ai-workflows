@@ -14,7 +14,9 @@ The approach that works best is consolidating multiple daily operations into a s
 
 ### The Stack
 - **Claude Code** (CLI) as the primary interface — runs in a terminal, stays open all day
-- **MCP servers** connecting Claude to Slack, Gmail, Google Calendar, Google Drive, Notion, and Airtable
+- **MCP servers** for integrations — two types:
+  - *Standalone MCP servers* (configured in `~/.mcp.json`): Google Workspace, Airtable, Obsidian, Paper Search, PubChem, mcp-pandas, Playwright, RSS, Apple Health
+  - *Claude Code first-party plugins* (configured via Claude Code settings, not `~/.mcp.json`): Slack, Notion
 - **Persistent memory** so each session picks up where the last one left off
 - **Custom skills** (slash commands) for recurring workflows
 - **Local markdown files** for notes, todos, and logs that AI reads and updates throughout the day
@@ -35,7 +37,9 @@ agteria-ai-workflows/
 └── examples/
     ├── memory-template.md             # How to set up persistent memory
     ├── mcp-setup-guide.md             # How to connect integrations
-    └── airtable-workflow.md           # How we use Airtable for experiment data
+    ├── airtable-workflow.md           # How we use Airtable for experiment data
+    ├── known-issues.md                # Known issues and workarounds
+    └── multi-project-setup.md         # Hub-and-spoke multi-project architecture
 ```
 
 ---
@@ -152,7 +156,9 @@ Markdown is great for narrative notes and logs. But when you need to ask "which 
 - API access so Claude can read/write programmatically
 
 ### Scale
-To date: 9 experiments, 143 VFA result records, 94 unique treatments processed through this workflow. Each new experiment takes ~10 minutes to fully process and upload.
+All treatment comparisons are normalized against the TMR-only control (% vs TMR), enabling cross-experiment comparison even when absolute values differ between runs.
+
+To date: 18+ experiments, 268 gas result records, 143 VFA result records, 172 unique treatments processed through this workflow. Each new experiment takes ~10 minutes to fully process and upload.
 
 ---
 
@@ -198,6 +204,8 @@ AI generates experiment setup files from a description of what you want to test:
 - **Thursday**: Review meeting
 - **Friday**: VFA data arrives, plan next week → cycle repeats
 
+The experiment planning project includes a Python CSV generator (`generate.py`) that takes YAML configs with compound names, concentrations, and bottle assignments, calculates stock solution volumes and pipetting amounts, and produces CSV files ready for LIMS import.
+
 The `/experiment` skill handles the Friday planning and Monday deliverable.
 
 ---
@@ -236,22 +244,28 @@ The `/weekly` skill reads all daily logs, synthesizes project-level summaries, a
 
 ---
 
-## 8. Cost Optimization — Model Switching
+## 8. Multi-Project Architecture
 
-Claude Code lets you choose between models (Sonnet vs Opus) and reasoning effort levels (0-100). These are two separate dials:
+For teams running multiple research programs, we use a hub-and-spoke architecture: a Command Center project handles daily ops (email, Slack, todos, logs), while domain-specific projects handle their own analysis, planning, and knowledge. The Command Center is always open; you switch to project-specific workspaces when doing deep work on a particular program, then return to the hub. This keeps project instructions focused and avoids bloating any single CLAUDE.md. See `examples/multi-project-setup.md` for the full architecture.
 
-- **Model**: Sonnet is fast and cheap; Opus is smarter but 5x more expensive per token
+---
+
+## 9. Cost Optimization — Model Switching
+
+Claude Code lets you choose between models (Sonnet 4.6 vs Opus 4.6) and reasoning effort levels (0-100). These are two separate dials:
+
+- **Model**: Sonnet 4.6 (`claude-sonnet-4-6`) is fast and cheap; Opus 4.6 (`claude-opus-4-6`) is smarter but 5x more expensive per token
 - **Reasoning effort**: How hard the model thinks before responding. Higher = more tokens consumed.
 
 ### The pattern that works
 
-Use **Sonnet** for routine, repeatable tasks:
+Use **Sonnet 4.6** for routine, repeatable tasks:
 - Morning briefings, daily closeouts
 - Email triage, Scholar alert archiving
 - Todo updates, Slack scanning
 - Simple file edits, data formatting
 
-Switch to **Opus** for tasks requiring deep reasoning:
+Switch to **Opus 4.6** for tasks requiring deep reasoning:
 - Experiment design and protocol writing
 - Literature analysis and paper evaluation
 - Multi-agent safety/toxicology sweeps
@@ -259,7 +273,7 @@ Switch to **Opus** for tasks requiring deep reasoning:
 - Cross-experiment pattern analysis
 
 ### In practice
-Toggle models with `/model` in Claude Code. A morning briefing on Sonnet costs roughly 10-20x less than on Opus — and produces the same result, since the task is mostly "read emails, sort them, archive junk." Save the expensive model for where it actually matters.
+Toggle models with `/model` in Claude Code, or use Shift+Tab for quick switching. A morning briefing on Sonnet costs roughly 10-20x less than on Opus — and produces the same result, since the task is mostly "read emails, sort them, archive junk." Save the expensive model for where it actually matters.
 
 ---
 
@@ -271,6 +285,7 @@ Toggle models with `/model` in Claude Code. A morning briefing on Sonnet costs r
 4. **Cross-referencing**: AI's biggest strength is connecting information across sources — a paper finding + experimental data + safety data + regulatory status = actionable insight.
 5. **Structured data where it matters**: Use markdown for narrative, Airtable for quantitative data that needs querying.
 6. **Let AI do the boring parts**: Data reformatting, timezone conversion, supplier searching, inbox scanning. Save human attention for decisions and interpretation.
+7. **Proactive database filling**: Configure AI to automatically log decisions and literature to shared databases without being asked. The user will forget — the AI won't.
 
 ## What Doesn't Work
 
